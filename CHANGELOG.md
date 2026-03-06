@@ -6,6 +6,18 @@ Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ---
 
+## [Unreleased]
+
+### Hinzugefügt (Added)
+
+- **Visual Studio 2022 Extension (Preview):** Neues VSIX-Projekt unter `visualstudio/GitLfsFileLocker.VisualStudio` mit Befehlen für:
+  - `Git LFS: Lock File` (Solution Explorer Kontextmenü)
+  - `Git LFS: Unlock File` (Solution Explorer Kontextmenü)
+  - `Git LFS: Show Active Locks` (Tools-Menü, Tool Window)
+- **Lock Tool Window:** Anzeige aktiver Git LFS Locks inkl. Refresh und Entsperren per Lock-ID.
+
+---
+
 ## [0.6.3] - 2026-01-31
 
 ### Hinzugefügt (Added)
