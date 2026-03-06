@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="guidGitLfsPackage">
+    <Buttons>
+      <Button guid="guidGitLfsCommandSet" id="cmdidLockFile" priority="0x0100" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+        <Strings>
+          <ButtonText>Git LFS: Lock File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidGitLfsCommandSet" id="cmdidUnlockFile" priority="0x0101" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+        <Strings>
+          <ButtonText>Git LFS: Unlock File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidGitLfsCommandSet" id="cmdidShowLocks" priority="0x0102" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+        <Strings>
+          <ButtonText>Git LFS: Show Active Locks</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidGitLfsPackage" value="{d598cab7-9f65-40c1-a89c-7207f8f8d2f6}" />
+    <GuidSymbol name="guidGitLfsCommandSet" value="{4f9f7f7e-6a84-42cb-8d3a-0ac9ac6d24be}">
+      <IDSymbol name="cmdidLockFile" value="0x0100" />
+      <IDSymbol name="cmdidUnlockFile" value="0x0101" />
+      <IDSymbol name="cmdidShowLocks" value="0x0102" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

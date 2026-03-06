@@ -1,6 +1,8 @@
 # git-lfs-file-locker
 
-A Visual Studio Code extension to manage Git LFS file locks directly from the editor.
+Git LFS file lock tooling for both:
+- Visual Studio Code extension (existing implementation in the repository root)
+- Visual Studio 2022 extension (new implementation in `visualstudio/GitLfsFileLocker.VisualStudio`)
 
 ## Features
 
@@ -23,8 +25,24 @@ A Visual Studio Code extension to manage Git LFS file locks directly from the ed
    - Right-click a file in the Explorer and select `Git LFS: Lock File` or `Git LFS: Unlock File`.
 2. **View Active Locks:**
    - Open the "Git LFS" view in the Activity Bar.
-   - Use the context menu on a locked file to unlock or reveal it.
-   - Click the "Show Active Locks in Editor" icon in the view's title bar for a more detailed table.
+    - Use the context menu on a locked file to unlock or reveal it.
+    - Click the "Show Active Locks in Editor" icon in the view's title bar for a more detailed table.
+
+## Visual Studio 2022 Extension (Preview)
+
+The Visual Studio extension project is located at:
+
+`visualstudio/GitLfsFileLocker.VisualStudio`
+
+Implemented commands:
+- **Git LFS: Lock File** (Solution Explorer context menu)
+- **Git LFS: Unlock File** (Solution Explorer context menu)
+- **Git LFS: Show Active Locks** (Tools menu, opens a lock management tool window)
+
+The lock tool window supports:
+- refresh
+- viewing current lock list (ID, path, owner, timestamp)
+- unlocking by selecting a lock row
 
 ## Requirements
 - [Git LFS](https://git-lfs.github.com/) must be installed and initialized in your repository.

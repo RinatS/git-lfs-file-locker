@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - copilot/**
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  vscode-extension-build:
+    name: VS Code extension compile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile VS Code extension
+        run: npm run compile
+
+  visual-studio-extension-build:
+    name: Visual Studio extension build and package
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Visual Studio solution
+        run: dotnet restore visualstudio/GitLfsFileLocker.VisualStudio.slnx
+
+      - name: Run unit tests
+        run: dotnet test visualstudio/GitLfsFileLocker.VisualStudio.Tests/GitLfsFileLocker.VisualStudio.Tests.csproj --configuration Release --no-restore
+
+      - name: Build VSIX package
+        run: dotnet build visualstudio/GitLfsFileLocker.VisualStudio/GitLfsFileLocker.VisualStudio.csproj --configuration Release --no-restore /p:DeployExtension=true /p:PackageAsVSIX=true
+
+      - name: Locate VSIX artifact
+        id: find_vsix
+        shell: pwsh
+        run: |
+          $vsix = Get-ChildItem -Path "visualstudio/GitLfsFileLocker.VisualStudio/bin/Release" -Filter *.vsix -Recurse | Select-Object -First 1
+          if (-not $vsix) {
+            throw "No VSIX file generated."
+          }
+          "vsix_path=$($vsix.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GitLfsFileLocker-VisualStudio-VSIX
+          path: ${{ steps.find_vsix.outputs.vsix_path }}
+          if-no-files-found: error
