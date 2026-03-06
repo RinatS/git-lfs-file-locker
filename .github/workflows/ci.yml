@@ -7,6 +7,9 @@ on:
       - copilot/**
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   vscode-extension-build:
     name: VS Code extension compile
