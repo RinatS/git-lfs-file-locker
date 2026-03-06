@@ -38,7 +38,11 @@ internal static class GitLfsService
     {
         var repositoryRoot = await GetRepositoryRootAsync(workingDirectory, cancellationToken).ConfigureAwait(false);
         var output = await ExecuteAsync("lfs locks --json", repositoryRoot, cancellationToken).ConfigureAwait(false);
+        return ParseLocksJson(output);
+    }
 
+    internal static IReadOnlyList<LockEntry> ParseLocksJson(string output)
+    {
         if (string.IsNullOrWhiteSpace(output))
         {
             return Array.Empty<LockEntry>();
@@ -46,13 +50,18 @@ internal static class GitLfsService
 
         try
         {
-            var list = JsonSerializer.Deserialize<List<LockEntry>>(output);
-            if (list is not null)
+            using var doc = JsonDocument.Parse(output);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
             {
+                var list = JsonSerializer.Deserialize<List<LockEntry>>(doc.RootElement.GetRawText());
+                if (list is null)
+                {
+                    return Array.Empty<LockEntry>();
+                }
+
                 return list;
             }
 
-            using var doc = JsonDocument.Parse(output);
             if (doc.RootElement.TryGetProperty("locks", out var locksElement) && locksElement.ValueKind == JsonValueKind.Array)
             {
                 var nested = JsonSerializer.Deserialize<List<LockEntry>>(locksElement.GetRawText());
